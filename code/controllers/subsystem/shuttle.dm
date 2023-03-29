@@ -137,7 +137,17 @@ SUBSYSTEM_DEF(shuttle)
 
 	var/transit_name = "Transit Map Zone"
 	var/datum/map_zone/mapzone = SSmapping.create_map_zone(transit_name)
-	var/datum/virtual_level/vlevel = SSmapping.create_virtual_level(transit_name, list(ZTRAIT_RESERVED = TRUE), mapzone, transit_width, transit_height, ALLOCATION_FREE)
+	var/datum/virtual_level/vlevel = SSmapping.create_virtual_level(
+		transit_name,
+		list(
+			ZTRAIT_RESERVED = TRUE,
+			ZTRAIT_SUN_TYPE = STATIC_EXPOSED
+		),
+		mapzone,
+		transit_width,
+		transit_height,
+		ALLOCATION_FREE
+	)
 
 	vlevel.reserve_margin(TRANSIT_SIZE_BORDER)
 
@@ -223,9 +233,9 @@ SUBSYSTEM_DEF(shuttle)
 			return port
 
 // Returns the ship the atom belongs to by also getting the shuttle port's current_ship
-/datum/controller/subsystem/shuttle/proc/get_ship( atom/object )
-	var/obj/docking_port/mobile/port = get_containing_shuttle( object )
-	if ( port?.current_ship )
+/datum/controller/subsystem/shuttle/proc/get_ship(atom/object)
+	var/obj/docking_port/mobile/port = get_containing_shuttle(object)
+	if (port?.current_ship)
 		return port.current_ship
 
 /datum/controller/subsystem/shuttle/proc/get_containing_docks(atom/A)
@@ -447,9 +457,18 @@ SUBSYSTEM_DEF(shuttle)
 				var/datum/overmap/ship/controlled/new_ship = new(null, S)
 				if(new_ship?.shuttle_port)
 					user.forceMove(new_ship.get_jump_to_turf())
-					message_admins("[key_name_admin(usr)] loaded [new_ship] ([S]) with the shuttle manipulator.")
-					log_admin("[key_name(usr)] loaded [new_ship] ([S]) with the shuttle manipulator.</span>")
+					message_admins("[key_name_admin(user)] loaded [new_ship] ([S]) with the shuttle manipulator.")
+					log_admin("[key_name(user)] loaded [new_ship] ([S]) with the shuttle manipulator.</span>")
 					SSblackbox.record_feedback("text", "shuttle_manipulator", 1, "[S]")
+
+		if("edit_template")
+			if(S)
+				. = TRUE
+				S.ui_interact(user)
+
+		if("new_template")
+			if(user.client)
+				user.client.map_template_upload()
 
 		if("jump_to")
 			if(params["type"] == "mobile")

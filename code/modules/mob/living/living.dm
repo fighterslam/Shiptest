@@ -521,8 +521,7 @@
 
 /// Proc to append behavior related to lying down.
 /mob/living/proc/on_lying_down(new_lying_angle)
-	if(layer == initial(layer)) //to avoid things like hiding larvas.
-		layer = LYING_MOB_LAYER //so mob lying always appear behind standing mobs
+	layer = LYING_MOB_LAYER //so mob lying always appear behind standing mobs
 	ADD_TRAIT(src, TRAIT_UI_BLOCKED, LYING_DOWN_TRAIT)
 	ADD_TRAIT(src, TRAIT_PULL_BLOCKED, LYING_DOWN_TRAIT)
 	density = FALSE // We lose density and stop bumping passable dense things.
@@ -1924,3 +1923,24 @@
 		remove_movespeed_modifier(/datum/movespeed_modifier/living_varspeed)
 		return
 	add_or_update_variable_movespeed_modifier(/datum/movespeed_modifier/living_varspeed, multiplicative_slowdown = speed)
+
+
+/**
+ * Applies the mob's speed variable to a movespeed modifier.
+ *
+ * Applies the speed variable to a movespeed variable.  If the speed is 0, removes the movespeed modifier.
+ */
+
+/mob/living/carbon/verb/open_close_eyes()
+	set category = "IC"
+	set name = "Open/Close Eyes"
+
+	if(HAS_TRAIT(src, TRAIT_EYESCLOSED))
+		REMOVE_TRAIT(src, TRAIT_EYESCLOSED, "[type]")
+		src.cure_blind("[type]")
+		src.update_body()
+		return
+	ADD_TRAIT(src, TRAIT_EYESCLOSED, "[type]")
+	src.become_blind("[type]")
+	src.update_body()
+	return

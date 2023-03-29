@@ -91,9 +91,12 @@
 
 
 /atom/movable/Destroy(force)
-	QDEL_NULL(proximity_monitor)
-	QDEL_NULL(language_holder)
-	QDEL_NULL(em_block)
+	if(proximity_monitor)
+		QDEL_NULL(proximity_monitor)
+	if(language_holder)
+		QDEL_NULL(language_holder)
+	if(em_block)
+		QDEL_NULL(em_block)
 
 	unbuckle_all_mobs(force = TRUE)
 
@@ -137,8 +140,7 @@
 	if(blocks_emissive != EMISSIVE_BLOCK_GENERIC)
 		return
 	if(length(managed_vis_overlays))
-		for(var/a in managed_vis_overlays)
-			var/obj/effect/overlay/vis/vs
+		for(var/obj/effect/overlay/vis/vs as anything in managed_vis_overlays)
 			if(vs.plane == EMISSIVE_BLOCKER_PLANE)
 				SSvis_overlays.remove_vis_overlay(src, list(vs))
 				break

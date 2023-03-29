@@ -124,11 +124,6 @@ There are several things that need to be remembered:
 
 		var/mutable_appearance/uniform_overlay
 
-		if(dna.species.sexes && (dna.species.bodytype & BODYTYPE_HUMANOID)) //Agggggggghhhhh
-			var/G = (gender == FEMALE) ? "f" : "m"
-			if(G == "f" && U.fitted != NO_FEMALE_UNIFORM)
-				uniform_overlay = U.build_worn_icon(default_layer = UNIFORM_LAYER, default_icon_file = 'icons/mob/clothing/under/default.dmi', isinhands = FALSE, femaleuniform = U.fitted, override_state = target_overlay, mob_species = dna.species)
-
 		var/icon_file
 		var/handled_by_bodytype = TRUE
 		if(!uniform_overlay)
@@ -433,9 +428,9 @@ There are several things that need to be remembered:
 
 		if(!(icon_exists(icon_file, RESOLVE_ICON_STATE(I))))
 			handled_by_bodytype = FALSE
-			icon_file = DEFAULT_SUIT_PATH
+			icon_file = I.mob_overlay_icon
 
-		suit_overlay = wear_suit.build_worn_icon(default_layer = SUIT_LAYER, default_icon_file = icon_file, mob_species = CHECK_USE_AUTOGEN)
+		suit_overlay = wear_suit.build_worn_icon(default_layer = SUIT_LAYER, override_file = icon_file, mob_species = CHECK_USE_AUTOGEN)
 
 		if(!suit_overlay)
 			return
@@ -694,6 +689,7 @@ in this situation default_icon_file is expected to match either the lefthand_ or
 femalueuniform: A value matching a uniform item's fitted var, if this is anything but NO_FEMALE_UNIFORM, we
 generate/load female uniform sprites matching all previously decided variables
 
+^this female part sucks and will be fully ripped out ideally
 
 */
 /obj/item/proc/build_worn_icon(default_layer = 0, default_icon_file = null, isinhands = FALSE, femaleuniform = NO_FEMALE_UNIFORM, override_state = null, override_file = null, datum/species/mob_species = null, direction = null)
