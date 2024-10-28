@@ -1,7 +1,8 @@
 /obj/item/melee/knife
 	icon_state = "kitchenknife"
 	item_state = "kitchenknife"
-	icon = 'icons/obj/weapon/knife.dmi'
+	icon = 'icons/obj/weapon/knives/knife.dmi'
+	world_file = 'icons/obj/weapon/knives/knife_world.dmi'
 	lefthand_file = 'icons/mob/inhands/weapons/knifes_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/weapons/knifes_righthand.dmi'
 	pickup_sound =  'sound/items/handling/knife1_pickup.ogg'
